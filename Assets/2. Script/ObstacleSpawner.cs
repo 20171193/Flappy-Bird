@@ -2,25 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ObstaclePattern
-{
-    Up,
-    Donw,
-    UpDown
-}
-
 public class ObstacleSpawner : MonoBehaviour
-{
-    public void SpawnObstacle(ObstaclePattern otcPattern)
+{ 
+    private Coroutine spawnRoutine;
+
+    [SerializeField]
+    GameObject pipePrefab;
+
+   
+    [SerializeField]
+    RectTransform spawnPos;
+
+    private void OnEnable()
     {
-        switch(otcPattern)
+        spawnRoutine = StartCoroutine(SpawnRoutine());
+    }
+    private void OnDisable()
+    {
+        StopCoroutine(spawnRoutine);
+    }
+
+    IEnumerator SpawnRoutine()
+    {
+        while(true)
         {
-            case ObstaclePattern.Up:
-                break;
-            case ObstaclePattern.Donw:
-                break;
-            case ObstaclePattern.UpDown:
-                break;
+            yield return new WaitForSeconds(GameManger.Ballance.ObstacleSpawnTime);
+            Instantiate(pipePrefab, spawnPos);
         }
     }
 }
