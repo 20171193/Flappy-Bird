@@ -4,15 +4,49 @@ using UnityEngine;
 
 public class MapSchrolling : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Header("References")]
+    [Space(10)]
+
+    [Header("BackGround Array")]
+    [SerializeField]
+    RectTransform[] backGrounds;
+
+    [Header("Ground Array")]
+    [SerializeField] 
+    RectTransform[] grounds;
+
+    [Header("Minimum X offset")]
+    [SerializeField] 
+    float minOffset;
+
+    private void Update()
     {
-        
+        for(int i =0; i< grounds.Length; i++)
+        {
+            grounds[i].Translate(Vector3.left * GameManger.Ballance.GameSpeed * 3f * Time.deltaTime);
+            if (grounds[i].anchoredPosition.x < minOffset)
+            {
+                grounds[i].anchoredPosition =
+                    new Vector2(
+                        grounds[(i + 2) % grounds.Length].anchoredPosition.x + grounds[i].sizeDelta.x - 50f,
+                        grounds[i].anchoredPosition.y
+                        );
+            }   
+
+            backGrounds[i].Translate(Vector3.left * GameManger.Ballance.GameSpeed * Time.deltaTime);
+            if (backGrounds[i].anchoredPosition.x < minOffset)
+            {
+                backGrounds[i].anchoredPosition = 
+                    new Vector2(
+                        backGrounds[(i + 2) % backGrounds.Length].anchoredPosition.x + backGrounds[i].sizeDelta.x - 50f,
+                        backGrounds[i].anchoredPosition.y
+                        );
+            }
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdatePosition()
     {
-        
+
     }
 }
